@@ -21,9 +21,10 @@ inline void hardware_pause() {
   _mm_pause();
 #elif defined(XENIUM_ARCH_SPARC)
   smt_pause();
+#elif defined(XENIUM_ARCH_AARCH64)
+  __asm__ volatile("yield");
 #else
   #warning "No hardware_pause implementation available - falling back to local volatile noop."
-  // this effectively prevents the compiler from optimizing away the whole backoff operation
   volatile int x = 0;
   (void)x;
 #endif

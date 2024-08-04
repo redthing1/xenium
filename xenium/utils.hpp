@@ -76,8 +76,13 @@ static inline std::uint64_t getticks() {
 static inline std::uint64_t getticks() {
   return __rdtsc();
 }
+#elif defined(__aarch64__)
+static inline std::uint64_t getticks() {
+  std::uint64_t ret;
+  __asm__ volatile("mrs %0, cntvct_el0" : "=r"(ret));
+  return ret;
+}
 #else
-  // TODO - add support for more compilers!
   #error "Unsupported compiler"
 #endif
 
